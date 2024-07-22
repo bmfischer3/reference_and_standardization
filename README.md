@@ -1,6 +1,6 @@
 # Project Guidelines and References
 
-Welcome to the project guidelines and references repository. This repository serves as a comprehensive guide to ensure consistency and best practices across all projects.
+Welcome to my project guidelines and references repository. This repository is meant to serve as a personal reference guide to ensure consistency and best practices across all of my projects. 
 
 ## Table of Contents
 
@@ -17,6 +17,7 @@ Welcome to the project guidelines and references repository. This repository ser
   - [Revision History](#revision-history)
     - [How to Update](#how-to-update)
   - [Books](#books)
+  - [Useful Tools](#useful-tools)
 
 ## Introduction
 
@@ -25,7 +26,7 @@ This repository contains guidelines and references that I will be using for soft
 ## Naming Conventions
 
 ### Branch Naming
-- **format/**: General template (category/topic/short-description(optional)')
+- **format/**: General template (`category/topic/short-description(optional)`)
 
 Topics include: feature, bugfix, hotfix, release, chore, test.
 
@@ -39,15 +40,15 @@ Topics include: feature, bugfix, hotfix, release, chore, test.
 
 ### Commit Naming Convention
 
-Source: dev.to (https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4#:~:text=Branch%20Naming%20Convention&text=A%20git%20branch%20should%20start,bugfix%20%2C%20hotfix%20%2C%20or%20test%20.&text=After%20the%20category%2C%20there%20should,%2C%20just%20add%20no%2Dref%20.)
+Source: [dev.to](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4#:~:text=Branch%20Naming%20Convention&text=A%20git%20branch%20should%20start,bugfix%20%2C%20hotfix%20%2C%20or%20test%20.&text=After%20the%20category%2C%20there%20should,%2C%20just%20add%20no%2Dref%20.)
 
-- **format/**: General format (git commit -m '<category>: action taken to accomplish xyz; secondary action to do abc; third action..... etc.)
+- **format/**: General format (`git commit -m '<category>: action taken to accomplish xyz; secondary action to do abc; third action..... etc.`)
 
-**feature/**: For adding new features (e.g., 'git commit -m 'feature: added button to allow users to search for product; removed add_product_price function as it became redundant with introduction of shopping_cart_function'')
-**fix/**: For fixing a bug (e.g., git 'commit -m 'fix: add the stop directive to button component to prevent propagation'')
-**refactor/**: For modifying code for performance or convenience purpose like readability (e.g., 'git commit -m 'refactor: rewrite button component in TypeScript''
+- **feature/**: For adding new features (e.g., `git commit -m 'feature: added button to allow users to search for product; removed add_product_price function as it became redundant with introduction of shopping_cart_function'`)
+- **fix/**: For fixing a bug (e.g., `git 'commit -m 'fix: add the stop directive to button component to prevent propagation'`)
+**refactor/**: For modifying code for performance or convenience purpose like readability (e.g., `git commit -m 'refactor: rewrite button component in TypeScript'`
 )
-**chore/**: For everything else like writing documentation, formatting, adding tests, etc. (e.g., 'git commit -m 'chore: write button documentation'')
+- **chore/**: For everything else like writing documentation, formatting, adding tests, etc. (e.g., `git commit -m 'chore: write button documentation'`)
 
 
 
@@ -77,6 +78,8 @@ Source: dev.to (https://dev.to/varbsan/a-simplified-convention-for-naming-branch
 - [Creating a new repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-new-repository)
 - [PEP 8 - Style Guide for Python Code](https://peps.python.org/pep-0008/)
 - [Google Style Guides](https://github.com/google/styleguide)
+- [GitHub Markdown Reference](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+- [Markdown Guide - Basic Syntax](https://www.markdownguide.org/basic-syntax/)
 
 
 ## Revision History
@@ -103,5 +106,7 @@ Below is a list of books I have read or am reading along my python journey.
 1. Automate the Boring Stuff with Python (https://automatetheboringstuff.com/)
 2. Essential Math for Data Science (https://www.amazon.com/Essential-Math-Data-Science-Fundamental/dp/1098102932)
 3. Football Analytics with Python & R (https://www.amazon.com/Football-Analytics-Python-Learning-Science/dp/1492099627/)
-4. 
+   
 
+## Useful Tools
+1. Dash for MacOS(https://kapeli.com/dash) - Excellent for accessing documentation online, like during air travel. 
