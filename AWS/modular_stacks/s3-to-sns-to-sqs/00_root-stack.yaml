@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This is the root stack. Creates the needed bucket for the stack template files.
+
+Parameters:
+  BranchName:
+    Type: String
+    Description: The name of the GitHub branch used to create this stack. To be overriden in deploy function. 
+    Default: test
+  
+  EnvironmentType:
+    Type: String
+    Description: "The environment type for which this is being deployed into."
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+      - stage
+      - test
+    ConstraintDescription: "Must be dev, prod, test or stage."
+
+Conditions:
+  IsDev: !Equals [ !Ref EnvironmentType, dev ]
+
+Mappings:
+  EnvConfig:
+    # DynamoDB
+    dev:
+      DeletionProtectionEnabled: false
+    prod:
+      DeletionProtectionEnabled: true
+      
+    # S3 Buckets
+    # Lambda
+    # 
+
+Resources:
+  YAMLTemplateBucket:
+  # If a name is not provided, it will take the Logical ID (aka Logical name) and append a [-] and random string of characters.
+  # and append that to the stackname. Thus bucket_name = ${AWS::StackName}-${EnvironmentType}-{Logical_name}-{random_characters}
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+      # If versioning is enabled you will need to create a bash file to manually empty the bucket prior to deletion.
+        Status: Suspended
+      LifecycleConfiguration:
+        Rules:
+        - Id: ExpireOldObjects
+          Status: Enabled
+          ExpirationInDays: 7
+      Tags: 
+        - Key: Environment
+          Value: !Ref EnvironmentType 
+        - Key: StackName 
+          Value: !Sub ${AWS::StackName}-${EnvironmentType}
+
+
+Outputs:
+  YamlTemplateBucket:
+    Description: Description for general bucket
+    Value: !Ref YAMLTemplateBucket
+    Export:
+      Name: !Sub YAML-Template-Bucket-${EnvironmentType}
