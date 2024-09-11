@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This is the changeset stack that adds in the
+  NotificationConfigurations and SNSTopicPolicy References.
+
+Parameters:
+  EnvironmentType:
+    Type: String
+    Description: The environment type for which this is being deployed into.
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+      - stage
+      - test
+    ConstraintDescription: Must be dev, prod, test or stage.
+
+Resources:
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      # TopicName: Leave logical names for all resources blank. 
+      DisplayName: Default SNS Topic 
+      Subscription: # Optional -- This specifies where the SNS topic will send a message. 
+        - Protocol: sqs
+          Endpoint: !GetAtt MySQSQueue.Arn    # Must be the ARN for the endpoint. Not a logical reference (!= !Ref)
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentType
+        - Key: StackName
+          Value: !Ref AWS::StackName
+
+  MySNSTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref MySNSTopic
+      PolicyDocument:                               # The below defines a policy that specifies which AWS services, users, and roles can perform actions on the SNS topic. 
+        Version: 2012-10-17
+        Statement:
+          - Sid: grant-buckets-publish              # SID needs to be a string with no spaces.
+            Principal:                              # Unofficial list of Service Principals: https://gist.github.com/shortjared/4c1e3fe52bdfa47522cfe5b41e5d6f22 
+              Service: s3.amazonaws.com
+            Resource: !Ref MySNSTopic               # Valid actions listed here: https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonsns.html
+            Action:
+              - sns:Publish
+            Effect: Allow
+            Condition:
+              ArnEquals:
+                aws:SourceArn:
+                  - !GetAtt MyS3Bucket001.Arn
+                  - !GetAtt MyS3Bucket002.Arn
+
+  MySQSQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Retain
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentType
+        - Key: StackName
+          Value: !Ref AWS::StackName
+      MessageRetentionPeriod: 500
+
+  # Policy for SQS Queue
+  MySQSQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref MySQSQueue
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+                              # Required, Object: The AWS service or identity that is allowed to assume the role.
+                              # Specify the services that are allowed to assume the role you created. 
+            Action:
+              - SQS:SendMessage
+              - SQS:ReceiveMessage
+            Resource: !GetAtt MySQSQueue.Arn
+
+  MyS3Bucket001:
+    Type: AWS::S3::Bucket     # Ensure proper dependency order. DependsOn may need to be used in some cases, especially with dynamic references.
+    Properties:
+      # BucketName: # Leave logical names for all resources blank. 
+      VersioningConfiguration:
+        Status: Suspended
+      LifecycleConfiguration:
+        Rules:
+          - Id: RuleNameHere
+            Status: Disabled              # Enabled or Disabled
+            ExpirationInDays: 365         # Number of days before objects are deleted. 
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentType
+        - Key: StackName
+          Value: !Ref AWS::StackName
+
+  MyS3Bucket002:
+    Type: AWS::S3::Bucket
+    # Ensure proper dependency order. DependsOn may need to be used in some cases, especially with dynamic references. 
+    Properties:
+      # BucketName: # Leave logical names for all resources blank. 
+      VersioningConfiguration:
+        Status: Suspended
+      LifecycleConfiguration:
+        Rules:
+          - Id: RuleNameHere
+            Status: Disabled                # Enabled or Disabled
+            ExpirationInDays: 365           # Number of days before objects are deleted. 
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentType
+        - Key: StackName
+          Value: !Ref AWS::StackName
